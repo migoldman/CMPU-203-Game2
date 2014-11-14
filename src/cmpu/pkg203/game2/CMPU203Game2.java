@@ -10,7 +10,16 @@ package cmpu.pkg203.game2;
  * @author michaelgoldman
  */
 public class CMPU203Game2 {
-    //this is a scary thing
+    //implements world
+        //create a pause world and a fight world
+            //pause world has
+                //options (maybe)
+                //restart
+            //fight world
+                //user 
+                //enemy
+                //boss
+                //upgrade
     
     /**
      * @param args the command line arguments
