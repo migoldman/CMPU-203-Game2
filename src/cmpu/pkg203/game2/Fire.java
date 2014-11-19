@@ -9,7 +9,6 @@ package cmpu.pkg203.game2;
  *
  * @author michaelgoldman
  */
-import javalib.colors.Red;
 
 enum Rotation {
         UP, DOWN, LEFT, RIGHT;

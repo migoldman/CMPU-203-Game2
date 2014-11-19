@@ -5,10 +5,21 @@
  */
 package cmpu.pkg203.game2;
 
+import javalib.worldimages.*;
 /**
  *
  * @author michaelgoldman
  */
+
 public class User {
+    Posn pos;
+    Rotation rotation;
+    int HP;
+         
     
+    User(Posn pos, Rotation rotation, int HP) {
+        this.pos = pos;
+        this.rotation = rotation;
+        this.HP = HP;
+    }
 }
