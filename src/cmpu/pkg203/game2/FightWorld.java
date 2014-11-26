@@ -23,4 +23,5 @@ public class FightWorld extends PauseWorld {
         this.boss = boss;
         this.level = level;
     }
+    
 }
