@@ -42,7 +42,7 @@ public class Minions {
             return new Minions(new Posn(xm, ym-1));
         }
     }
-    
+        
     public boolean onUserHuh() {   
         if(xm == xu && ym == yu) {
             return true;
