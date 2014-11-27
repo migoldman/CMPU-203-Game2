@@ -36,7 +36,7 @@ public class FightWorld extends PauseWorld {
         this.level = level;
     }
 
-    //Image things
+    //#JustImagethings
     public WorldImage background() {
         return new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
                 SCREENWIDTH, SCREENHEIGHT, new Black());
