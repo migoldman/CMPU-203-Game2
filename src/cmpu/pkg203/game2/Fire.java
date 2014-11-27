@@ -47,7 +47,9 @@ public class Fire {
         this.color = Colors.Red;
     }
     
-    //Might want to make it so you are always attacking, unsure atm
+    //Unsure if this is correct position for method. If the user is firing, 
+    //would I do something (in fightworld) like 
+        //if(firing==true) { fire.attack()}?
     public Fire attack() {
         Fire attack;            
         if(rotation == Rotation.UP) {
@@ -65,6 +67,7 @@ public class Fire {
         return attack;
     }
     
+    //width of the flame based on rotation (including upgrade)
     public int width() {
         if(upgrade) {
             if(rotation == Rotation.UP || rotation == Rotation.DOWN) {
@@ -79,6 +82,7 @@ public class Fire {
         }
     }
     
+    //height of the falme based on rotation (including upgrade)
     public int height() {
         if(upgrade) {
             if(rotation == Rotation.UP || rotation == Rotation.DOWN) {

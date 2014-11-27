@@ -14,12 +14,14 @@ import javalib.worldimages.*;
 public class User {
     Posn pos;
     Rotation rotation;
+    boolean firing;
     int HP;
          
     
-    User(Posn pos, Rotation rotation, int HP) {
+    User(Posn pos, Rotation rotation, boolean firing, int HP) {
         this.pos = pos;
         this.rotation = rotation;
+        this.firing = firing;
         this.HP = HP;
     }
     
@@ -32,30 +34,39 @@ public class User {
         int y = pos.y;
         
         switch(ke) {
+            //Move keys
             case ("left"):
                 if(x > 0) {
-                    return new User(setPosn(x-1,y), rotation, HP);
+                    return new User(setPosn(x-1,y), rotation, firing, HP);
                 }
             case ("right"):
                 if(x < 20) {
-                    return new User(setPosn(x+1, y), rotation, HP);
+                    return new User(setPosn(x+1, y), rotation, firing, HP);
                 }
             case ("up"):
                 if(y > 0) {
-                    return new User(setPosn(x, y-1), rotation, HP);
+                    return new User(setPosn(x, y-1), rotation, firing, HP);
                 }
             case ("down"):
                 if(y<20) {
-                    return new User(setPosn(x,y+1), rotation, HP);
+                    return new User(setPosn(x,y+1), rotation, firing, HP);
                 }
+            
+            //Rotation keys
             case ("W"):
-                return new User(pos, Rotation.UP, HP);
+                return new User(pos, Rotation.UP, firing, HP);
             case ("A"):
-                return new User(pos, Rotation.LEFT, HP);
+                return new User(pos, Rotation.LEFT, firing, HP);
             case ("S"):
-                return new User(pos, Rotation.DOWN, HP);
+                return new User(pos, Rotation.DOWN, firing, HP);
             case ("D"):
-                return new User(pos, Rotation.RIGHT, HP);
+                return new User(pos, Rotation.RIGHT, firing, HP);
+            case ("spacebar"):
+                if(firing == true) {
+                    return new User(pos, rotation, false, HP);
+                } else {
+                    return new User(pos, rotation, true, HP);
+                }
             default:
                 return this;
         }
