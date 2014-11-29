@@ -72,6 +72,16 @@ public class User {
             default:
                 return this;
         }
-
+    }
+    
+    public User loseHP() {
+        return new User(pos, rotation, firing, HP-1);
+    }
+    
+    public boolean isDeadHuh() {
+        if(HP <= 0) {
+            return true;
+        }
+        return false;
     }
 }

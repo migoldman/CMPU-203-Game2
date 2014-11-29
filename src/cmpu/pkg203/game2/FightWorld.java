@@ -35,6 +35,30 @@ public class FightWorld extends PauseWorld {
         this.boss = boss;
         this.level = level;
     }
+    
+    //TODO
+        //Make a spawner
+            //graphics
+        //Make the upgrade item
+        //
+        
+    
+    public FightWorld takeDamage() {
+        FightWorld tempFW = this;
+        LinkedList<Minions> tempM = enemies;
+        User tempU = user;
+        for(int i =0; i < enemies.size(); i++) {
+            if(enemies.get(i).onUserHuh()) {
+                tempM.remove(i);
+                tempU.loseHP();
+                if(tempU.isDeadHuh()) {
+                    gameOver = true;
+                }
+                tempFW = new FightWorld(tempU, tempM, boss, level);
+            }
+        }
+        return tempFW;
+    }
 
     //#JustImagethings
     public WorldImage background() {
@@ -59,6 +83,13 @@ public class FightWorld extends PauseWorld {
             return new OverlayImages(drawMinions(Minions, counter - 1),
                     drawMinion(Minions.get(counter)));
         }
+    }
+    
+    public WorldEnd gameOver() {
+        if(gameOver) {
+            return null;
+        }
+        return null;
     }
 
 }
