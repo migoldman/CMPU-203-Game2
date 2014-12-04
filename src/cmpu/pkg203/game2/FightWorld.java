@@ -69,6 +69,10 @@ public class FightWorld extends PauseWorld {
     public WorldImage drawUser(int x, int y) {
         return new CircleImage(new Posn(x, y), SIZE, new Green());
     }
+    
+    public WorldImage drawUser(Posn place) {
+        return new CircleImage(place, SIZE, new Green());
+    }
 
     public WorldImage drawMinion(Minions Minion) {
         return new RectangleImage(new Posn(Minion.xm, Minion.ym), SIZE, SIZE, new White());
@@ -85,11 +89,29 @@ public class FightWorld extends PauseWorld {
         }
     }
     
-    public WorldEnd gameOver() {
-        if(gameOver) {
-            return null;
-        }
-        return null;
+    public WorldImage drawWorld() {
+        return new OverlayImages(drawMinions(enemies, enemies.size()-1),
+            new OverlayImages(drawUser(user.pos),background()));
     }
-
+    
+    public FightWorld onTick() {
+        System.out.println(user.toString());
+        System.out.println("game over is " + gameOver);
+        if(user.HP <= 0) {
+            gameOver = true;
+        }
+        
+    }    
+    
+    //Game Over is false
+    
+    public WorldEnd worldEnds() {
+        if(gameOver) {
+            System.out.println("You died! You got to level " + level);
+            return new WorldEnd(true, new TextImage(new Posn(SCREENWIDTH /2, SCREENHEIGHT/2), ("GAME OVER"), 20, new White()));
+        }
+        else {
+            return new WorldEnd(false, this.drawWorld());
+        }
+    }
 }

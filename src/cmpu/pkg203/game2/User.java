@@ -84,4 +84,10 @@ public class User {
         }
         return false;
     }
+    
+    public String toString() {
+        return "X: " + pos.x + " Y: " + pos.y + 
+                " Rotation: " + rotation + " firing: " + firing + 
+                " HP: " + HP;
+    }
 }
