@@ -10,5 +10,6 @@ package cmpu.pkg203.game2;
  * @author michaelgoldman
  */
 public class PauseWorld {
-    
+    //still not sure what to do here. Assuming do an keylistener and then make
+        //methods to change colors for user/fightworld
 }

@@ -36,29 +36,23 @@ public class FightWorld extends PauseWorld {
         this.level = level;
     }
     
+    public int randomInt(int min, int max) {
+        return random.nextInt((max-min)+1)+min;
+    }
+    
+    public FightWorld makeWorld(int level) {
+        User tempU = new User(new Posn(randomInt(0,5),randomInt(0,20)),Rotation.UP,false,3);
+        LinkedList<Minions> mob = new LinkedList<>();
+        for(int i = 0; i < level; i++) {
+            mob.add(new Minions(new Posn(randomInt(10,19),randomInt(0,20))));
+        }
+    }
+    
     //TODO
         //Make a spawner
             //graphics
         //Make the upgrade item
         //
-        
-    
-    public FightWorld takeDamage() {
-        FightWorld tempFW = this;
-        LinkedList<Minions> tempM = enemies;
-        User tempU = user;
-        for(int i =0; i < enemies.size(); i++) {
-            if(enemies.get(i).onUserHuh()) {
-                tempM.remove(i);
-                tempU.loseHP();
-                if(tempU.isDeadHuh()) {
-                    gameOver = true;
-                }
-                tempFW = new FightWorld(tempU, tempM, boss, level);
-            }
-        }
-        return tempFW;
-    }
 
     //#JustImagethings
     public WorldImage background() {
@@ -95,10 +89,25 @@ public class FightWorld extends PauseWorld {
     }
     
     public FightWorld onTick() {
+        User tempU = user;
+        LinkedList<Minions> tempM = enemies;
         System.out.println(user.toString());
         System.out.println("game over is " + gameOver);
         if(user.HP <= 0) {
             gameOver = true;
+        }
+        for(int i = 0; i < tempM.size(); i++) {
+            if(tempM.get(i).onUserHuh()) {
+                user.loseHP();
+                tempM.remove(i);
+            }
+            else if(tempM.get(i).onFireHuh()) {
+                tempM.remove(i);
+            }
+        }
+        if(boss.onUserHuh()) {
+            user.loseHP();
+            boss.teleport();
         }
         
     }    
