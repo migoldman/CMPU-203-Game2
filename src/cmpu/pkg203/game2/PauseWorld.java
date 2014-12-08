@@ -5,11 +5,17 @@
  */
 package cmpu.pkg203.game2;
 
+import javalib.funworld.World;
+import javalib.worldimages.WorldImage;
+
 /**
  *
  * @author michaelgoldman
  */
-public class PauseWorld {
+public class PauseWorld extends World {
+    
+
+   
     //still not sure what to do here. Assuming do an keylistener and then make
         //methods to change colors for user/fightworld
 }

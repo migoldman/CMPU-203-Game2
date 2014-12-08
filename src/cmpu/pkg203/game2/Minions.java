@@ -16,19 +16,19 @@ public class Minions {
     Posn pos;
     int width, height;
     User user;
-    Fire fire;
-    //position of minion
-    int xm = this.pos.x;
-    int ym = this.pos.y;
-    //position of user
-    int xu = user.pos.x;
-    int yu = user.pos.y;
+    Fire fire;   
     
     public Minions(Posn pos) {
         this.pos = pos;
     }
     
     public Minions move() {
+        //position of minion
+        int xm = this.pos.x;
+        int ym = this.pos.y;
+        //position of user
+        int xu = user.pos.x;
+        int yu = user.pos.y;
         //if left of user, move right
         if(xm < xu) {
             return new Minions(new Posn(xm+1,ym));
@@ -52,6 +52,12 @@ public class Minions {
         //(including the width or height), return true
     
     public boolean onFireHuh() {
+        //position of minion
+        int xm = this.pos.x;
+        int ym = this.pos.y;
+        //position of user
+        int xu = user.pos.x;
+        int yu = user.pos.y;
         Rotation fireR = fire.rotation;
         switch(fireR){
             case UP:
@@ -81,6 +87,12 @@ public class Minions {
     }
         
     public boolean onUserHuh() {   
+        //position of minion
+        int xm = this.pos.x;
+        int ym = this.pos.y;
+        //position of user
+        int xu = user.pos.x;
+        int yu = user.pos.y;
         if(xm == xu && ym == yu) {
             return true;
         }
@@ -88,4 +100,5 @@ public class Minions {
             return false;
         }
     }
+    
 }

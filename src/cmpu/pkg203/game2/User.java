@@ -63,7 +63,7 @@ public class User {
             case ("D"):
                 return new User(pos, Rotation.RIGHT, firing, HP);
                 //What is the actual variable name for the spacebar key?
-            case ("T"):
+            case (" "):
                 if (firing == true) {
                     return new User(pos, rotation, false, HP);
                 } else {
@@ -88,6 +88,6 @@ public class User {
     public String toString() {
         return "X: " + pos.x + " Y: " + pos.y + 
                 " Rotation: " + rotation + " firing: " + firing + 
-                " HP: " + HP;
+                " HP: " + HP + " isDead: " + isDeadHuh();
     }
 }
