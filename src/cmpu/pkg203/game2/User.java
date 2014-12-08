@@ -17,12 +17,14 @@ public class User {
     Posn pos;
     Rotation rotation;
     boolean firing;
+    Fire fire;
     int HP;
 
-    User(Posn pos, Rotation rotation, boolean firing, int HP) {
+    User(Posn pos, Rotation rotation, boolean firing, Fire fire, int HP) {
         this.pos = pos;
         this.rotation = rotation;
         this.firing = firing;
+        this.fire = fire;
         this.HP = HP;
     }
 
@@ -38,36 +40,36 @@ public class User {
             //Move keys
             case ("left"):
                 if (x > 0) {
-                    return new User(setPosn(x - 1, y), rotation, firing, HP);
+                    return new User(setPosn(x - 1, y), rotation, firing, fire, HP);
                 }
             case ("right"):
                 if (x < 20) {
-                    return new User(setPosn(x + 1, y), rotation, firing, HP);
+                    return new User(setPosn(x + 1, y), rotation, firing, fire, HP);
                 }
             case ("up"):
                 if (y > 0) {
-                    return new User(setPosn(x, y - 1), rotation, firing, HP);
+                    return new User(setPosn(x, y - 1), rotation, firing, fire, HP);
                 }
             case ("down"):
                 if (y < 20) {
-                    return new User(setPosn(x, y + 1), rotation, firing, HP);
+                    return new User(setPosn(x, y + 1), rotation, firing, fire, HP);
                 }
 
             //Rotation keys
             case ("W"):
-                return new User(pos, Rotation.UP, firing, HP);
+                return new User(pos, Rotation.UP, firing, fire, HP);
             case ("A"):
-                return new User(pos, Rotation.LEFT, firing, HP);
+                return new User(pos, Rotation.LEFT, firing, fire, HP);
             case ("S"):
-                return new User(pos, Rotation.DOWN, firing, HP);
+                return new User(pos, Rotation.DOWN, firing, fire, HP);
             case ("D"):
-                return new User(pos, Rotation.RIGHT, firing, HP);
+                return new User(pos, Rotation.RIGHT, firing, fire, HP);
                 //What is the actual variable name for the spacebar key?
             case (" "):
                 if (firing == true) {
-                    return new User(pos, rotation, false, HP);
+                    return new User(pos, rotation, false, new Fire(), HP);
                 } else {
-                    return new User(pos, rotation, true, HP);
+                    return new User(pos, rotation, true, fire.attack(), HP);
                 }
             default:
                 return this;
@@ -75,7 +77,7 @@ public class User {
     }
     
     public User loseHP() {
-        return new User(pos, rotation, firing, HP-1);
+        return new User(pos, rotation, firing, fire, HP-1);
     }
     
     public boolean isDeadHuh() {
@@ -87,7 +89,7 @@ public class User {
     
     public String toString() {
         return "X: " + pos.x + " Y: " + pos.y + 
-                " Rotation: " + rotation + " firing: " + firing + 
+                " Rotation: " + rotation + " firing: " +
                 " HP: " + HP + " isDead: " + isDeadHuh();
     }
 }

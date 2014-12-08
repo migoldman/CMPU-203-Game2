@@ -24,6 +24,8 @@ public class Fire {
     boolean upgrade;
     Colors color;
     
+    Fire() {}
+    
     Fire(int x, int y, Rotation rotation, boolean upgrade, Colors color) {
         this.x = x;
         this.y = y;
@@ -49,7 +51,7 @@ public class Fire {
     
     //Unsure if this is correct position for method. If the user is firing, 
     //would I do something (in fightworld) like 
-        //if(firing==true) { fire.attack()}?
+        
     public Fire attack() {
         Fire attack;            
         if(rotation == Rotation.UP) {
@@ -69,33 +71,14 @@ public class Fire {
     
     //width of the flame based on rotation (including upgrade)
     public int width() {
-        if(upgrade) {
-            if(rotation == Rotation.UP || rotation == Rotation.DOWN) {
-                return 1;
-            }
-            else {
-                return 3;
-            }
-        }
-        else {
-            return 1;
-        }
+        return 1;
     }
     
     //height of the falme based on rotation (including upgrade)
     public int height() {
-        if(upgrade) {
-            if(rotation == Rotation.UP || rotation == Rotation.DOWN) {
-                return 3;
-            }
-            else {
-                return 1;
-            }
-        }
-        else {
-            return 1;
-        }
+        return 1;
     }
+   
 }
 
 
