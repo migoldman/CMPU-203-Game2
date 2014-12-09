@@ -131,7 +131,7 @@ public class FightWorld extends World {
     //if key = p, return pauseworld
 
     public World onKeyEvent(String ke) {
-        if ("a".equals(ke) || "w".equals(ke) || "s".equals(ke) || "d".equals(ke)
+        if (ke.equals("a") || "w".equals(ke) || "s".equals(ke) || "d".equals(ke)
                 || "up".equals(ke) || "down".equals(ke) || "left".equals(ke) 
                 || "right".equals(ke) || " ".equals(ke)) {
             user.onKeyEvent(ke);
@@ -149,20 +149,20 @@ public class FightWorld extends World {
             gameOver = true;
         }
         for (int i = 0; i < tempM.size()-1; i++) {
-            if (tempM.get(i).onUserHuh()) {
+            if (tempM.get(i).onUserHuh(user)) {
                 tempM.remove(i);
-                return new FightWorld(user.loseHP(), tempM, boss.move(), level);
-            } else if (tempM.get(i).onFireHuh()) {
+                return new FightWorld(user.loseHP(), tempM, boss.move(user), level);
+            } else if (tempM.get(i).onFireHuh(user)) {
                 tempM.remove(i);
-                return new FightWorld(user, tempM, boss.move(), level);
+                return new FightWorld(user, tempM, boss.move(user), level);
             } else {
-                tempM.get(i).move();
-                return new FightWorld(user, tempM, boss.move(), level);
+                tempM.get(i).move(user);
+                return new FightWorld(user, tempM, boss.move(user), level);
             }
         }
-        if (boss.onUserHuh()) {
+        if (boss.onUserHuh(user)) {
             return new FightWorld(user.loseHP(), enemies, boss.teleport(), level);
-        } else if (boss.onFireHuh()) {
+        } else if (boss.onFireHuh(user)) {
             if (boss.HP - 1 <= 0) {
                 return makeWorld(level + 1);
             } else {
@@ -174,7 +174,7 @@ public class FightWorld extends World {
             boss.invinc = false;
             return new FightWorld(user, enemies, boss, level);
         }
-        return new FightWorld(user, enemies, boss.move(), level);
+        return new FightWorld(user, enemies, boss.move(user), level);
     }
 
     //Game Over is false

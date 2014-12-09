@@ -15,14 +15,12 @@ public class Minions {
 
     Posn pos;
     int width, height;
-    User user;
-    Fire fire;
 
     public Minions(Posn pos) {
         this.pos = pos;
     }
 
-    public Minions move() {
+    public Minions move(User user) {
         //position of minion
         int xm = this.pos.x;
         int ym = this.pos.y;
@@ -46,7 +44,7 @@ public class Minions {
 
     //if the minion is in the same x and y of the fire 
     //(including the width or height), return true
-    public boolean onFireHuh() {
+    public boolean onFireHuh(User user) {
         //position of minion
         int xm = this.pos.x;
         int ym = this.pos.y;
@@ -54,27 +52,27 @@ public class Minions {
         int xu = user.pos.x;
         int yu = user.pos.y;
 
-        Rotation fireR = fire.rotation;
+        Rotation fireR = user.fire.rotation;
         if (user.firing) {
             switch (fireR) {
                 case UP:
                     //fire height takes into account upgrade, so it is fine
-                    if ((ym > yu && ym < yu + fire.height())
+                    if ((ym > yu && ym < yu + 1)
                             && xm == xu) {
                         return true;
                     }
                 case DOWN:
-                    if ((ym < yu && ym < yu - fire.height())
+                    if ((ym < yu && ym < yu - 1)
                             && xm == xu) {
                         return true;
                     }
                 case RIGHT:
-                    if ((xm > xu && xm < xu + fire.width()
+                    if ((xm > xu && xm < xu + 1
                             && ym == yu)) {
                         return true;
                     }
                 case LEFT:
-                    if ((xm < xu && xm < xu - fire.width()
+                    if ((xm < xu && xm < xu - 1
                             && ym == yu)) {
                         return true;
                     }
@@ -83,7 +81,7 @@ public class Minions {
         return false;
     }
 
-    public boolean onUserHuh() {
+    public boolean onUserHuh(User user) {
         //position of minion
         int xm = this.pos.x;
         int ym = this.pos.y;
