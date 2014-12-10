@@ -52,21 +52,17 @@ public class Fire {
     //Unsure if this is correct position for method. If the user is firing, 
     //would I do something (in fightworld) like 
         
-    public Fire attack() {
-        Fire attack;            
-        if(rotation == Rotation.UP) {
-            attack = new Fire(x,y-1,Rotation.UP,this.upgrade,this.color);
+    public Fire attack(User user) {        
+        switch(user.rotation ) {
+            case UP: 
+                return new Fire(x,y-1,Rotation.UP,this.upgrade,this.color);
+            case DOWN:
+                return new Fire(x,y+1,Rotation.DOWN,this.upgrade,this.color);
+            case LEFT:
+                return new Fire(x-1,y,Rotation.LEFT,this.upgrade,this.color);
+            default:
+                return new Fire(x+1,y,Rotation.RIGHT,this.upgrade,this.color);
         }
-        else if(rotation == Rotation.DOWN) {
-            attack = new Fire(x,y+1,Rotation.DOWN,this.upgrade,this.color);
-        }
-        else if(rotation == Rotation.LEFT) {
-            attack = new Fire(x-1,y,Rotation.LEFT,this.upgrade,this.color);
-        }
-        else {
-            attack = new Fire(x+1,y,Rotation.RIGHT,this.upgrade,this.color);
-        }
-        return attack;
     }
     
     //width of the flame based on rotation (including upgrade)

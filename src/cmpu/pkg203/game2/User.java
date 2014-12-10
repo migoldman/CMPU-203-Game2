@@ -54,22 +54,20 @@ public class User {
                 if (y < 20) {
                     return new User(setPosn(x, y + 1), rotation, firing, fire, HP);
                 }
-
-            //Rotation keys
-            case ("W"):
+            case ("w"):
                 return new User(pos, Rotation.UP, firing, fire, HP);
-            case ("A"):
+            case ("a"):
                 return new User(pos, Rotation.LEFT, firing, fire, HP);
-            case ("S"):
+            case ("s"):
                 return new User(pos, Rotation.DOWN, firing, fire, HP);
-            case ("D"):
+            case ("d"):
                 return new User(pos, Rotation.RIGHT, firing, fire, HP);
                 //What is the actual variable name for the spacebar key?
             case (" "):
                 if (firing == true) {
                     return new User(pos, rotation, false, new Fire(), HP);
                 } else {
-                    return new User(pos, rotation, true, fire.attack(), HP);
+                    return new User(pos, rotation, true, fire.attack(this), HP);
                 }
             default:
                 return this;
@@ -89,7 +87,7 @@ public class User {
     
     public String toString() {
         return "X: " + pos.x + " Y: " + pos.y + 
-                " Rotation: " + rotation + " firing: " +
+                " Rotation: " + rotation + " firing: " + firing +
                 " HP: " + HP + " isDead: " + isDeadHuh();
     }
 }

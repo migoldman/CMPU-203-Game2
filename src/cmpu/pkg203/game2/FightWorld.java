@@ -17,9 +17,9 @@ import javalib.worldimages.*;
  */
 public class FightWorld extends World {
 
-    static final int SCREENWIDTH = 1000;
-    static final int SCREENHEIGHT = 1000;
-    static final int SIZE = 50;
+    static final int SCREENWIDTH = 600;
+    static final int SCREENHEIGHT = 600;
+    static final int SIZE = 10;
     boolean firstWaveHuh = true;
     boolean gameOver;
     Random random = new Random();
@@ -131,17 +131,19 @@ public class FightWorld extends World {
     //if key = p, return pauseworld
 
     public World onKeyEvent(String ke) {
-        if (ke.equals("a") || "w".equals(ke) || "s".equals(ke) || "d".equals(ke)
-                || "up".equals(ke) || "down".equals(ke) || "left".equals(ke) 
-                || "right".equals(ke) || " ".equals(ke)) {
-            user.onKeyEvent(ke);
-        } else if ("p".equals(ke)) {
+        if (ke.equals("a") || ke.equals("w") || ke.equals("s") || ke.equals("d")
+                || ke.equals("up") || ke.equals("down") || ke.equals("left") 
+                || ke.equals("right") || ke.equals(" ")) {
+            
+            return new FightWorld(user.onKeyEvent(ke), enemies, boss, level);
+        } else if (ke.equals("p")) {
             return new PauseWorld(user, enemies, boss, level);
         }
+        System.out.println("nothing pressed");
         return new FightWorld(user, enemies, boss, level);
     }
 
-    public FightWorld onTick() {
+    public World onTick() {
         LinkedList<Minions> tempM = enemies;
         System.out.println(user.toString());
         System.out.println("game over is " + gameOver);
@@ -174,7 +176,8 @@ public class FightWorld extends World {
             boss.invinc = false;
             return new FightWorld(user, enemies, boss, level);
         }
-        return new FightWorld(user, enemies, boss.move(user), level);
+        System.out.println("Defaulting");
+        return new FightWorld(user, enemies, boss.move(user), level).onKeyEvent("");
     }
 
     //Game Over is false

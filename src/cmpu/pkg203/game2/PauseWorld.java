@@ -15,18 +15,13 @@ import javalib.worldimages.*;
  *
  * @author michaelgoldman
  */
-public class PauseWorld extends World {
+public class PauseWorld extends FightWorld {
     
     static final int SCREENWIDTH = 1000;
     static final int SCREENHEIGHT = 1000;
     
-    User user;
-    LinkedList<Minions> enemies;
-    BigBoss boss;
-    FightWorld fw;
-    int level;
-    
     PauseWorld(User user, LinkedList<Minions> enemies, BigBoss boss, int level) {
+        super();
         this.user = user;
         this.enemies = enemies;
         this.boss = boss;
@@ -38,7 +33,7 @@ public class PauseWorld extends World {
             return new FightWorld(user, enemies, boss, level);
         }
         else if("r".equals(ke)) {
-            return fw.makeWorld();
+            return makeWorld();
         }
         return this;
     }
