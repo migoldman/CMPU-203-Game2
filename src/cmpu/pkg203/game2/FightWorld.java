@@ -87,13 +87,13 @@ public class FightWorld extends World {
         if(user.firing) {
             switch (user.fire.rotation) {
                 case UP:
-                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y + 1)*SIZE), SIZE, SIZE, new Red());
+                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y - 1)*SIZE), SIZE, SIZE, new Red());
                 case LEFT:
                     return new RectangleImage(new Posn((user.pos.x - 1)*SIZE, user.pos.y*SIZE), SIZE, SIZE, new Red());
                 case DOWN:
-                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y - 1)*SIZE), SIZE, SIZE, new Red());
-                default:
                     return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y + 1)*SIZE), SIZE, SIZE, new Red());
+                default:
+                    return new RectangleImage(new Posn((user.pos.x +1)*SIZE, user.pos.y*SIZE), SIZE, SIZE, new Red());
             }
         }
         else {
@@ -163,21 +163,26 @@ public class FightWorld extends World {
             }
         }
         if (boss.onUserHuh(user)) {
-            return new FightWorld(user.loseHP(), enemies, boss.teleport(), level);
+            return new FightWorld(user.loseHP(), tempM, boss.teleport(), level);
         } else if (boss.onFireHuh(user)) {
             if (boss.HP - 1 <= 0) {
                 return makeWorld(level + 1);
             } else {
-                return new FightWorld(user, enemies, boss.loseHP(), level);
+                return new FightWorld(user, tempM, boss.loseHP(), level);
             }
         } else if (firstWaveHuh && tempM.size() == 0) {
             firstWaveHuh = false;
             this.spawnMinions();
             boss.invinc = false;
-            return new FightWorld(user, enemies, boss, level);
+            return new FightWorld(user, tempM, boss, level);
         }
         System.out.println("Defaulting");
-        return new FightWorld(user, enemies, boss.move(user), level).onKeyEvent("");
+        for(int i = 0; i < tempM.size()-1; i ++) {
+            tempM.get(i).move(user);
+            return new FightWorld(user, tempM, boss.move(user), level).onKeyEvent("");
+        }
+        return new FightWorld(user, tempM, boss.move(user), level).onKeyEvent("");
+
     }
 
     //Game Over is false
