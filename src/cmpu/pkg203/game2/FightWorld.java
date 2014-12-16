@@ -164,10 +164,7 @@ public class FightWorld extends World {
         User nextU = user;
         
         FightWorld nextW = new FightWorld(user, enemies, bigmove, level);
-        
-        System.out.println(user.toString());
-        System.out.println("boss invicible? " + bigbaddie.invinc + " boss HP " + bigbaddie.HP);
-        
+                
         //Game over function
         if (user.isDeadHuh()) {
             gameOver = true;
@@ -176,7 +173,6 @@ public class FightWorld extends World {
         //goes through the list to check if minion is on fire or on user
         while(evil.hasNext()) {
             Minions baddie = evil.next();
-            System.out.println("Baddie is at " + baddie.pos.x + " and " + baddie.pos.y);
             if (baddie.onUserHuh(nextU)) {
                 System.out.println("Baddie exploded!");
                 nextU = nextU.loseHP();
@@ -208,12 +204,14 @@ public class FightWorld extends World {
                 System.out.println("YOUR ATTACK DOES NOTHING TO ME!");
             }
             else {
+                System.out.println("OUCH said bb");
+
                 if (boss.HP - 1 <= 0) {
+                    System.out.println("LEVEL " + (level+1) + "!");
                     return makeWorld(level + 1);
 
                     //else lose hp
                 } else {
-                    System.out.println("OUCH said bb");
                     bigbaddie = boss.loseHP();
                     nextW = new FightWorld(nextU, nextM, bigbaddie.teleport(), level);
                 }
@@ -227,8 +225,6 @@ public class FightWorld extends World {
             nextW = new FightWorld(user, spawnMinions(nextU,bigmove,level), bigmove, level);
         }
         
-        System.out.println("Defaulting");
-        System.out.println("size: " + enemies.size());
         while(evil.hasNext()) {
             nextM.add(evil.next().move(nextU));
         }
