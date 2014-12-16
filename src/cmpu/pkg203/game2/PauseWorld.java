@@ -39,6 +39,7 @@ public class PauseWorld extends World {
         }
         else if(ke.equals("up")) {
             System.out.println("Level increased to " + (level+1));
+            boss.HP++;
             level++;
         }
         else if(ke.equals("down")) {

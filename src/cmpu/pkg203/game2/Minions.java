@@ -58,25 +58,36 @@ public class Minions {
         if (user.firing) {
             switch (fireR) {
                 case UP:
-                    //fire height takes into account upgrade, so it is fine
                     if ((ym == yu - 1)
                             && xm == xu) {
                         return true;
+                    }
+                    else {
+                        return false;
                     }
                 case DOWN:
                     if ((ym == yu + 1)
                             && xm == xu) {
                         return true;
                     }
+                    else {
+                        return false;
+                    }
                 case RIGHT:
                     if ((xm == xu + 1
                             && ym == yu)) {
                         return true;
                     }
+                    else {
+                        return false;
+                    }
                 case LEFT:
                     if ((xm == xu - 1
                             && ym == yu)) {
                         return true;
+                    }
+                    else {
+                        return false;
                     }
             }
         }
@@ -90,6 +101,7 @@ public class Minions {
         //position of user
         int xu = user.pos.x;
         int yu = user.pos.y;
+        
         if (xm == xu && ym == yu) {
             return true;
         } else {
