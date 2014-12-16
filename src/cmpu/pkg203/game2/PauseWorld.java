@@ -5,6 +5,7 @@
  */
 package cmpu.pkg203.game2;
 
+import static cmpu.pkg203.game2.FightWorld.SCREENWIDTH;
 import java.util.LinkedList;
 import javalib.colors.*;
 import javalib.funworld.World;
@@ -22,6 +23,7 @@ public class PauseWorld extends World {
     int level;
     int SCREENWIDTH = 600;
     int SCREENHEIGHT = 600;
+    int SIZE = 30;
         
     PauseWorld(User user, LinkedList<Minions> enemies, BigBoss boss, int level) {
         this.user = user;
@@ -86,10 +88,17 @@ public class PauseWorld extends World {
     }
     
     public WorldImage makeImage() {
-        return new OverlayImages(new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
-                SCREENWIDTH, SCREENHEIGHT, new Yellow()), new TextImage(new Posn(SCREENWIDTH/2, SCREENHEIGHT/2), "PAUSED", 30, new Black()));    
+        return new OverlayImages(
+                new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
+                    SCREENWIDTH, SCREENHEIGHT, new Yellow()), 
+                new OverlayImages(
+                    new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT-SIZE*2), 
+                        ("HP: " + user.HP + "  X: " + user.pos.x + "  Y: " + user.pos.y + "  Max minions: " + (level+2) + "  Boss HP: " + boss.HP + "  Level: " + level),
+                        12, new Black()), 
+                    new TextImage(new Posn(SCREENWIDTH /2, SCREENHEIGHT/2), 
+                            "PAUSED", 
+                            32, new Black())));
     }
-    
     
     public World onTick() {
         return this;

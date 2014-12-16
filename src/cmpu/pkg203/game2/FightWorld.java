@@ -80,8 +80,12 @@ public class FightWorld extends World {
 
     //#JustImagethings
     public WorldImage background() {
-        return new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
-                SCREENWIDTH, SCREENHEIGHT, new Black());
+        return new OverlayImages(
+                new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
+                    SCREENWIDTH, SCREENHEIGHT, new Black()), 
+        new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT-SIZE*2), 
+                    ("HP: " + user.HP + "  X: " + user.pos.x + "  Y: " + user.pos.y + "  Rotation: " + user.rotation + "  Minions alive: " + enemies.size() + "  Boss HP: " + boss.HP + "  Level: " + level),
+                    12, new Yellow()));
     }
 
     public WorldImage drawUser() {

@@ -42,27 +42,38 @@ public class User {
                 if (x > 0) {
                     return new User(setPosn(x - 1, y), rotation, firing, fire, HP);
                 }
+                else {
+                    return this;
+                }
             case ("right"):
                 if (x < 20) {
                     return new User(setPosn(x + 1, y), rotation, firing, fire, HP);
+                }
+                else {
+                    return this;
                 }
             case ("up"):
                 if (y > 0) {
                     return new User(setPosn(x, y - 1), rotation, firing, fire, HP);
                 }
+                else {
+                    return this;
+                }
             case ("down"):
                 if (y < 20) {
                     return new User(setPosn(x, y + 1), rotation, firing, fire, HP);
+                }
+                else {
+                    return this;
                 }
             
             case ("w"):
                 if(firing) {
                     System.out.println("Can't rotate while firing");
                     return this;
-
                 }
                 else {
-                    return new User(pos, Rotation.UP, firing, fire, HP);
+                    return new User(pos, rotation.UP, firing, fire, HP);
                 }
             case ("a"):
                 if(firing) {
