@@ -37,20 +37,36 @@ public class PauseWorld extends World {
         else if(ke.equals("r")) {
             return new FightWorld();
         }
-        else {
-            return this;
+        else if(ke.equals("up")) {
+            System.out.println("Level increased to " + (level+1));
+            level++;
         }
+        else if(ke.equals("down")) {
+            if(level == 1) {
+                System.out.println("Can't go lower than level 1");
+            }
+            else {
+                System.out.println("Level decreased to " + (level-1));
+                level--;
+            }
+        }
+        else if(ke.equals(" ")) {
+            if(enemies.size() == 0) {
+                System.out.println("No enemies to remove!");
+            }
+            else {
+                System.out.println("360-noscoped a minion! Now only " + (enemies.size()-1) + " left");
+                enemies.remove(0);
+            }
+        }
+        return this;
     }
     
     public WorldImage makeImage() {
-        return new OverlayImages(new TextImage(new Posn(SCREENWIDTH/2, SCREENHEIGHT/2), "PAUSED", 30, new Black()), 
-                new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
-                SCREENWIDTH, SCREENHEIGHT, new Yellow()));    
+        return new OverlayImages(new RectangleImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2),
+                SCREENWIDTH, SCREENHEIGHT, new Yellow()), new TextImage(new Posn(SCREENWIDTH/2, SCREENHEIGHT/2), "PAUSED", 30, new Black()));    
     }
     
-    public WorldEnd worldEnds() {
-        return null;
-    }
     
     public World onTick() {
         return this;
