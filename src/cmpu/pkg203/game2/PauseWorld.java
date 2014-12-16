@@ -20,8 +20,8 @@ public class PauseWorld extends World {
     LinkedList<Minions> enemies;
     BigBoss boss;
     int level;
-    int SCREENWIDTH = 1000;
-    int SCREENHEIGHT = 1000;
+    int SCREENWIDTH = 600;
+    int SCREENHEIGHT = 600;
         
     PauseWorld(User user, LinkedList<Minions> enemies, BigBoss boss, int level) {
         this.user = user;

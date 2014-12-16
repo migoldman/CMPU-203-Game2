@@ -63,10 +63,12 @@ public class FightWorld extends World {
     
     public LinkedList<Minions> spawnMinions(User user, BigBoss boss, int level) {
         LinkedList<Minions> temp = new LinkedList();
-        int x = randomInt(10, 20);
-        int y = randomInt(0, 20);
+        int x;
+        int y;
         
         for(int i = 0; i < level+2; i++) {
+            x = randomInt(10, 20);
+            y = randomInt(0, 20);
             if((x == user.pos.x && y == user.pos.y)
                     || (x == boss.pos.x && y == boss.pos.y)) {
                  spawnMinions(user, boss, level);
