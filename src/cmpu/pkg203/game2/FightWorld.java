@@ -30,10 +30,10 @@ public class FightWorld extends World {
     //grid size is 20 by 20
 
     FightWorld() {
-        user = new User(new Posn(randomInt(0, 5), randomInt(0, 20)), Rotation.UP, false, new Fire(), 3);
+        user = new User(new Posn(2,10), Rotation.UP, false, new Fire(), 3);
         enemies = new LinkedList<Minions>();
-        for (int i = 0; i < level + 1; i++) {
-            enemies.add(new Minions(new Posn(randomInt(10, 19), randomInt(0, 20))));
+        for (int i = 0; i < level + 2; i++) {
+            enemies.add(new Minions(new Posn(randomInt(10, 19), randomInt(0,20))));
         }
         boss = new BigBoss(new Posn(20, 10), true, level);
         level = 1;
@@ -45,8 +45,8 @@ public class FightWorld extends World {
         this.boss = boss;
         this.level = level;
     }
-
-    public int randomInt(int min, int max) {
+    
+     public int randomInt(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
 
@@ -55,21 +55,25 @@ public class FightWorld extends World {
     }
 
     public FightWorld makeWorld(int level) {
-        User tempU = new User(new Posn(randomInt(0, 5), randomInt(0, 20)), Rotation.UP, false, new Fire(), 3);
-        LinkedList<Minions> mob = new LinkedList<>();
+        User tempU = new User(new Posn(2, 10), Rotation.UP, false, new Fire(), 3);
+        LinkedList<Minions> mob = spawnMinions(user, boss, level);
         BigBoss tempB = new BigBoss(new Posn(20, 10), true, level + 2);
-        for (int i = 0; i < level + 1; i++) {
-            mob.add(new Minions(new Posn(randomInt(10, 19), randomInt(0, 20))));
-        }
         return new FightWorld(tempU, mob, tempB, level);
     }
-
-    public FightWorld spawnMinions() {
-        LinkedList<Minions> mob = new LinkedList<>();
-        for (int i = 0; i < level + 1; i++) {
-            mob.add(new Minions(new Posn(randomInt(10, 19), randomInt(0, 20))));
+    
+    public LinkedList<Minions> spawnMinions(User user, BigBoss boss, int level) {
+        LinkedList<Minions> temp = new LinkedList();
+        int x = randomInt(10, 20);
+        int y = randomInt(0, 20);
+        
+        for(int i = 0; i < level+2; i++) {
+            if((x == user.pos.x && y == user.pos.y)
+                    || (x == boss.pos.x && y == boss.pos.y)) {
+                 spawnMinions(user, boss, level);
+            }
+            temp.add(new Minions(new Posn(x,y)));
         }
-        return new FightWorld(this.user, mob, boss, level);
+        return temp;
     }
 
     //#JustImagethings
@@ -143,48 +147,50 @@ public class FightWorld extends World {
     }
 
     public World onTick() {
-        int counter = 0;
-        LinkedList<Minions> startM = enemies;
+        Iterator<Minions> evil = enemies.listIterator(0);
         LinkedList<Minions> nextM = new LinkedList();
-        FightWorld nextW = new FightWorld(user, nextM, boss, level);
+        
+        BigBoss bigbaddie = boss;
+        BigBoss bigmove = boss.move(user);
+        
+        FightWorld nextW = new FightWorld(user, enemies, bigmove, level);
         
         System.out.println(user.toString());
+        System.out.println("boss invicible? " + bigbaddie.invinc + " boss HP " + bigbaddie.HP);
         
         //Game over function
         if (user.isDeadHuh()) {
             gameOver = true;
         }
-        System.out.println("game over is " + gameOver);
 
         //goes through the list to check if minion is on fire or on user
-        while(counter < startM.size()) {
-            
-            Minions baddie = startM.get(counter);
+        while(evil.hasNext()) {
+            Minions baddie = evil.next();
             System.out.println("Baddie is at " + baddie.pos.x + " and " + baddie.pos.y);
             if (baddie.onUserHuh(user)) {
                 System.out.println("Baddie exploded!");
-                nextW = new FightWorld(user.loseHP(), nextM, boss.move(user), level);
-                counter++;
-            } 
+                nextW = new FightWorld(user.loseHP(), nextM, bigmove, level);
+            }
             
-            else if (startM.get(counter).onFireHuh(user) 
-                    || startM.get(counter).move(user).onFireHuh(user)) {
+            else if (baddie.onFireHuh(user) 
+                    || baddie.move(user).onFireHuh(user)) {
                 System.out.println("Baddie on fire!");
-                nextW = new FightWorld(user, nextM, boss.move(user), level);
-                counter++;
+                nextW = new FightWorld(user, nextM, bigmove, level);
             } 
             
             else {
                 nextM.add(baddie.move(user));
-                nextW = new FightWorld(user, nextM, boss.move(user), level);
-                counter++;
+                bigbaddie = bigbaddie.move(user);
+                nextW = new FightWorld(user, nextM, bigmove, level);
             }
         }
         
         //checks boss on fire and on user
             //if on user, teleport
         if (boss.onUserHuh(user)) {
-            nextW =  new FightWorld(user.loseHP(), startM, boss.teleport(), level);
+            System.out.print("teleporting!");
+            bigbaddie = boss.teleport();
+            nextW =  new FightWorld(user.loseHP(), enemies, bigbaddie, level);
             
             //if on fire, check if dead
         } else if (boss.onFireHuh(user)) {
@@ -193,19 +199,23 @@ public class FightWorld extends World {
                 
                 //else lose hp
             } else {
-                nextW = new FightWorld(user, startM, boss.loseHP(), level);
+                System.out.println("OUCH said bb");
+                bigbaddie = boss.loseHP();
+                nextW = new FightWorld(user, enemies, bigbaddie.teleport(), level);
             }
             
             //If first wave is all dead, spawn minions
-        } else if (startM.size() == 0) {
-            this.spawnMinions();
-            boss.invinc = false;
-            nextW = new FightWorld(user, startM, boss, level);
+        } else if (enemies.size() == 0) {
+            System.out.println("Spawning baddies");
+            bigbaddie.invinc = false;
+            bigmove.invinc = false;
+            nextW = new FightWorld(user, spawnMinions(user,bigmove,level), bigmove, level);
         }
+        
         System.out.println("Defaulting");
-        System.out.println("size: " + startM.size());
-        for(int i = 0; i < startM.size()-1; i ++) {
-            nextM.add(startM.get(i).move(user));
+        System.out.println("size: " + enemies.size());
+        while(evil.hasNext()) {
+            nextM.add(evil.next().move(user));
         }
         return nextW.onKeyEvent("");
     }
@@ -214,7 +224,7 @@ public class FightWorld extends World {
     public WorldEnd worldEnds() {
         if (user.isDeadHuh()) {
             System.out.println("You died! You got to level " + level);
-            return new WorldEnd(true, new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2), ("GAME OVER"), 20, new White()));
+            return new WorldEnd(true, new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2), ("GAME OVER! You got to level " + level), 20, new Black()));
         } else {
             return new WorldEnd(false, this.makeImage());
         }

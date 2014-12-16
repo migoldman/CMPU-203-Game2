@@ -6,6 +6,7 @@
 package cmpu.pkg203.game2;
 
 import javalib.worldimages.*;
+import java.util.Random;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Minions {
 
     Posn pos;
     int width, height;
+    Random random = new Random();
 
     public Minions(Posn pos) {
         this.pos = pos;
@@ -93,6 +95,5 @@ public class Minions {
         } else {
             return false;
         }
-    }
-
+    }    
 }

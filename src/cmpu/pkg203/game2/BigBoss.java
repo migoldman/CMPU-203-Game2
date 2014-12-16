@@ -65,22 +65,22 @@ public class BigBoss {
             switch (fireR) {
                 case UP:
                     //fire height takes into account upgrade, so it is fine
-                    if ((yb > yu && yb < yu + 1)
+                    if ((yb == yu - 1)
                             && xb == xu) {
                         return true;
                     }
                 case DOWN:
-                    if ((yb < yu && yb < yu - 1)
+                    if ((yb == yu + 1 )
                             && xb == xu) {
                         return true;
                     }
                 case RIGHT:
-                    if ((xb > xu && xb < xu + 1
+                    if ((xb == xu + 1
                             && yb == yu)) {
                         return true;
                     }
                 case LEFT:
-                    if ((xb < xu && xb < xu - 1
+                    if ((xb == xu - 1
                             && yb == yu)) {
                         return true;
                     }
