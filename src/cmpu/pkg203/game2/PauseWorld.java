@@ -16,10 +16,7 @@ import javalib.worldimages.*;
  * @author michaelgoldman
  */
 public class PauseWorld extends FightWorld {
-    
-    static final int SCREENWIDTH = 1000;
-    static final int SCREENHEIGHT = 1000;
-    
+        
     PauseWorld(User user, LinkedList<Minions> enemies, BigBoss boss, int level) {
         super();
         this.user = user;
@@ -46,5 +43,9 @@ public class PauseWorld extends FightWorld {
     
     public WorldEnd worldEnds() {
         return null;
+    }
+    
+    public World onTick() {
+        return this;
     }
 }

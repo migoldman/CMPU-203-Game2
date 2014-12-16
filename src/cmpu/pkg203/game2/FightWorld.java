@@ -7,9 +7,9 @@ package cmpu.pkg203.game2;
 
 import javalib.funworld.*;
 import javalib.colors.*;
-import java.util.Random;
-import java.util.LinkedList;
+import java.util.*;
 import javalib.worldimages.*;
+
 
 /**
  *
@@ -144,45 +144,68 @@ public class FightWorld extends World {
     }
 
     public World onTick() {
-        LinkedList<Minions> tempM = enemies;
+        int counter = 0;
+        LinkedList<Minions> startM = enemies;
+        LinkedList<Minions> nextM = new LinkedList();
+        FightWorld nextW = new FightWorld(user, nextM, boss, level);
+        
         System.out.println(user.toString());
-        System.out.println("game over is " + gameOver);
+        
+        //Game over function
         if (user.HP <= 0) {
             gameOver = true;
         }
-        for (int i = 0; i < tempM.size()-1; i++) {
-            if (tempM.get(i).onUserHuh(user)) {
-                tempM.remove(i);
-                return new FightWorld(user.loseHP(), tempM, boss.move(user), level);
-            } else if (tempM.get(i).onFireHuh(user)) {
-                tempM.remove(i);
-                return new FightWorld(user, tempM, boss.move(user), level);
-            } else {
-                tempM.get(i).move(user);
-                return new FightWorld(user, tempM, boss.move(user), level);
+        System.out.println("game over is " + gameOver);
+
+        //goes through the list to check if minion is on fire or on user
+        while(counter < startM.size()) {
+            
+            Minions baddie = startM.get(counter).move(user);
+            System.out.println("Baddie is at " + baddie.pos.x + " and " + baddie.pos.y);
+            if (baddie.onUserHuh(user)) {
+                nextW = new FightWorld(user.loseHP(), nextM, boss.move(user), level);
+                counter++;
+            } 
+            
+            else if (startM.get(counter).onFireHuh(user)) {
+                nextW = new FightWorld(user, nextM, boss.move(user), level);
+                counter++;
+            } 
+            
+            else {
+                nextM.add(baddie);
+                nextW = new FightWorld(user, nextM, boss.move(user), level);
+                counter++;
             }
         }
+        
+        //checks boss on fire and on user
+            //if on user, teleport
         if (boss.onUserHuh(user)) {
-            return new FightWorld(user.loseHP(), tempM, boss.teleport(), level);
+            nextW =  new FightWorld(user.loseHP(), startM, boss.teleport(), level);
+            
+            //if on fire, check if dead
         } else if (boss.onFireHuh(user)) {
             if (boss.HP - 1 <= 0) {
                 return makeWorld(level + 1);
+                
+                //else lose hp
             } else {
-                return new FightWorld(user, tempM, boss.loseHP(), level);
+                nextW = new FightWorld(user, startM, boss.loseHP(), level);
             }
-        } else if (firstWaveHuh && tempM.size() == 0) {
+            
+            //If first wave is all dead, spawn minions
+        } else if (firstWaveHuh && startM.size() == 0) {
             firstWaveHuh = false;
             this.spawnMinions();
             boss.invinc = false;
-            return new FightWorld(user, tempM, boss, level);
+            nextW = new FightWorld(user, startM, boss, level);
         }
         System.out.println("Defaulting");
-        for(int i = 0; i < tempM.size()-1; i ++) {
-            tempM.get(i).move(user);
-            return new FightWorld(user, tempM, boss.move(user), level).onKeyEvent("");
+        for(int i = 0; i < startM.size()-1; i ++) {
+            nextM.add(startM.get(i).move(user));
         }
-        return new FightWorld(user, tempM, boss.move(user), level).onKeyEvent("");
-
+        return nextW.onKeyEvent("");
     }
 
     //Game Over is false
