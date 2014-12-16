@@ -20,7 +20,6 @@ public class FightWorld extends World {
     static final int SCREENWIDTH = 600;
     static final int SCREENHEIGHT = 600;
     static final int SIZE = 10;
-    boolean firstWaveHuh = true;
     boolean gameOver;
     Random random = new Random();
 
@@ -152,7 +151,7 @@ public class FightWorld extends World {
         System.out.println(user.toString());
         
         //Game over function
-        if (user.HP <= 0) {
+        if (user.isDeadHuh()) {
             gameOver = true;
         }
         System.out.println("game over is " + gameOver);
@@ -160,20 +159,23 @@ public class FightWorld extends World {
         //goes through the list to check if minion is on fire or on user
         while(counter < startM.size()) {
             
-            Minions baddie = startM.get(counter).move(user);
+            Minions baddie = startM.get(counter);
             System.out.println("Baddie is at " + baddie.pos.x + " and " + baddie.pos.y);
             if (baddie.onUserHuh(user)) {
+                System.out.println("Baddie exploded!");
                 nextW = new FightWorld(user.loseHP(), nextM, boss.move(user), level);
                 counter++;
             } 
             
-            else if (startM.get(counter).onFireHuh(user)) {
+            else if (startM.get(counter).onFireHuh(user) 
+                    || startM.get(counter).move(user).onFireHuh(user)) {
+                System.out.println("Baddie on fire!");
                 nextW = new FightWorld(user, nextM, boss.move(user), level);
                 counter++;
             } 
             
             else {
-                nextM.add(baddie);
+                nextM.add(baddie.move(user));
                 nextW = new FightWorld(user, nextM, boss.move(user), level);
                 counter++;
             }
@@ -195,13 +197,13 @@ public class FightWorld extends World {
             }
             
             //If first wave is all dead, spawn minions
-        } else if (firstWaveHuh && startM.size() == 0) {
-            firstWaveHuh = false;
+        } else if (startM.size() == 0) {
             this.spawnMinions();
             boss.invinc = false;
             nextW = new FightWorld(user, startM, boss, level);
         }
         System.out.println("Defaulting");
+        System.out.println("size: " + startM.size());
         for(int i = 0; i < startM.size()-1; i ++) {
             nextM.add(startM.get(i).move(user));
         }
@@ -210,7 +212,7 @@ public class FightWorld extends World {
 
     //Game Over is false
     public WorldEnd worldEnds() {
-        if (gameOver) {
+        if (user.isDeadHuh()) {
             System.out.println("You died! You got to level " + level);
             return new WorldEnd(true, new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2), ("GAME OVER"), 20, new White()));
         } else {

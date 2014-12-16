@@ -54,15 +54,40 @@ public class User {
                 if (y < 20) {
                     return new User(setPosn(x, y + 1), rotation, firing, fire, HP);
                 }
+            
             case ("w"):
-                return new User(pos, Rotation.UP, firing, fire, HP);
+                if(firing) {
+                    System.out.println("Can't rotate while firing");
+                    return this;
+
+                }
+                else {
+                    return new User(pos, Rotation.UP, firing, fire, HP);
+                }
             case ("a"):
-                return new User(pos, Rotation.LEFT, firing, fire, HP);
+                if(firing) {
+                    System.out.println("Can't rotate while firing");
+                    return this;
+                }
+                else {
+                    return new User(pos, Rotation.LEFT, firing, fire, HP);
+                }
             case ("s"):
-                return new User(pos, Rotation.DOWN, firing, fire, HP);
+                if(firing) {
+                    System.out.println("Can't rotate while firing");
+                    return this;
+                }
+                else {
+                    return new User(pos, Rotation.DOWN, firing, fire, HP);
+                }
             case ("d"):
-                return new User(pos, Rotation.RIGHT, firing, fire, HP);
-                //What is the actual variable name for the spacebar key?
+                if(firing) {
+                    System.out.println("Can't rotate while firing");
+                    return this;
+                }
+                else {
+                    return new User(pos, Rotation.RIGHT, firing, fire, HP);
+                }
             case (" "):
                 if (firing == true) {
                     return new User(pos, rotation, false, new Fire(), HP);

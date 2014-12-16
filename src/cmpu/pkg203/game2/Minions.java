@@ -57,22 +57,22 @@ public class Minions {
             switch (fireR) {
                 case UP:
                     //fire height takes into account upgrade, so it is fine
-                    if ((ym > yu && ym < yu + 1)
+                    if ((ym == yu - 1)
                             && xm == xu) {
                         return true;
                     }
                 case DOWN:
-                    if ((ym < yu && ym < yu - 1)
+                    if ((ym == yu + 1)
                             && xm == xu) {
                         return true;
                     }
                 case RIGHT:
-                    if ((xm > xu && xm < xu + 1
+                    if ((xm == xu + 1
                             && ym == yu)) {
                         return true;
                     }
                 case LEFT:
-                    if ((xm < xu && xm < xu - 1
+                    if ((xm == xu - 1
                             && ym == yu)) {
                         return true;
                     }
