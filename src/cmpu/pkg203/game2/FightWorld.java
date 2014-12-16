@@ -174,8 +174,7 @@ public class FightWorld extends World {
                 nextW = new FightWorld(user.loseHP(), nextM, bigmove, level);
             }
             
-            else if (baddie.onFireHuh(user) 
-                    || baddie.move(user).onFireHuh(user)) {
+            else if (baddie.onFireHuh(user)) {
                 System.out.println("Baddie on fire!");
                 nextW = new FightWorld(user, nextM, bigmove, level);
             } 
