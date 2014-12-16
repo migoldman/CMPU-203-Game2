@@ -34,23 +34,39 @@ public class PauseWorld extends World {
         if(ke.equals("p")) {
             return new FightWorld(user, enemies, boss, level);
         }
+        
         else if(ke.equals("r")) {
             return new FightWorld();
         }
-        else if(ke.equals("up")) {
-            System.out.println("Level increased to " + (level+1));
+        
+        else if(ke.equals("h")) {
+            System.out.println("HP increased to " + (user.HP+1));
+            user.HP++;
+        }
+        
+        else if(ke.equals("up")) {            
             boss.HP++;
             level++;
+            System.out.println("Level increased to " + level);
+            System.out.println("Boss HP is " + boss.HP + " and " + (level+2) + 
+                    " minions will spawn next wave");
+
         }
+        
         else if(ke.equals("down")) {
             if(level == 1) {
                 System.out.println("Can't go lower than level 1");
             }
             else {
-                System.out.println("Level decreased to " + (level-1));
+                boss.HP--;
                 level--;
+                System.out.println("Level decreased to " + level);
+                System.out.println("Boss HP is " + boss.HP + " and " + (level +2) + 
+                        " minions will spawn next wave");
+                
             }
         }
+        
         else if(ke.equals(" ")) {
             if(enemies.size() == 0) {
                 System.out.println("No enemies to remove!");
@@ -59,6 +75,10 @@ public class PauseWorld extends World {
                 System.out.println("360-noscoped a minion! Now only " + (enemies.size()-1) + " left");
                 enemies.remove(0);
             }
+        }
+        else if(ke.equals("`")) {
+            user.HP=0;
+            return new FightWorld(user, enemies, boss, level);
         }
         return this;
     }

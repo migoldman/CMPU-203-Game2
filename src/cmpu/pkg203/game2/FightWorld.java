@@ -19,7 +19,7 @@ public class FightWorld extends World {
 
     static final int SCREENWIDTH = 600;
     static final int SCREENHEIGHT = 600;
-    static final int SIZE = 10;
+    static final int SIZE = 25;
     boolean gameOver;
     Random random = new Random();
 
@@ -46,7 +46,7 @@ public class FightWorld extends World {
         this.level = level;
     }
     
-     public int randomInt(int min, int max) {
+    public int randomInt(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
 
@@ -67,7 +67,7 @@ public class FightWorld extends World {
         int y;
         
         for(int i = 0; i < level+2; i++) {
-            x = randomInt(10, 20);
+            x = randomInt(0, 20);
             y = randomInt(0, 20);
             if((x == user.pos.x && y == user.pos.y)
                     || (x == boss.pos.x && y == boss.pos.y)) {
@@ -85,20 +85,20 @@ public class FightWorld extends World {
     }
 
     public WorldImage drawUser() {
-        return new CircleImage(new Posn(user.pos.x*SIZE, user.pos.y*SIZE), SIZE, new Green());
+        return new DiskImage(new Posn(user.pos.x*SIZE, user.pos.y*SIZE), SIZE, new Green());
     }
 
     public WorldImage drawFire() {
         if(user.firing) {
             switch (user.fire.rotation) {
                 case UP:
-                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y - 1)*SIZE), SIZE, SIZE, new Red());
+                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y - 1)*SIZE), SIZE, SIZE, new Blue());
                 case LEFT:
-                    return new RectangleImage(new Posn((user.pos.x - 1)*SIZE, user.pos.y*SIZE), SIZE, SIZE, new Red());
+                    return new RectangleImage(new Posn((user.pos.x - 1)*SIZE, user.pos.y*SIZE), SIZE, SIZE, new Blue());
                 case DOWN:
-                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y + 1)*SIZE), SIZE, SIZE, new Red());
+                    return new RectangleImage(new Posn(user.pos.x*SIZE, (user.pos.y + 1)*SIZE), SIZE, SIZE, new Blue());
                 default:
-                    return new RectangleImage(new Posn((user.pos.x +1)*SIZE, user.pos.y*SIZE), SIZE, SIZE, new Red());
+                    return new RectangleImage(new Posn((user.pos.x +1)*SIZE, user.pos.y*SIZE), SIZE, SIZE, new Blue());
             }
         }
         else {
@@ -122,7 +122,7 @@ public class FightWorld extends World {
     }
 
     public WorldImage drawBoss() {
-        return new CircleImage(new Posn(boss.pos.x*SIZE, boss.pos.y*SIZE), SIZE, new Red());
+        return new DiskImage(new Posn(boss.pos.x*SIZE, boss.pos.y*SIZE), SIZE, new Red());
     }
 
     //Hvae the user, fire, boss, minions, then background
@@ -144,7 +144,7 @@ public class FightWorld extends World {
         } else if (ke.equals("p")) {
             return new PauseWorld(user, enemies, boss, level);
         }
-        System.out.println("nothing pressed");
+        System.out.println(ke + " was pressed");
         return new FightWorld(user, enemies, boss, level);
     }
 
@@ -195,14 +195,19 @@ public class FightWorld extends World {
             
             //if on fire, check if dead
         } else if (boss.onFireHuh(user)) {
-            if (boss.HP - 1 <= 0) {
-                return makeWorld(level + 1);
-                
-                //else lose hp
-            } else {
-                System.out.println("OUCH said bb");
-                bigbaddie = boss.loseHP();
-                nextW = new FightWorld(user, enemies, bigbaddie.teleport(), level);
+            if(boss.invinc) {
+                System.out.println("YOUR FIRE DOES NOTHING TO ME");
+            }
+            else {
+                if (boss.HP - 1 <= 0) {
+                    return makeWorld(level + 1);
+
+                    //else lose hp
+                } else {
+                    System.out.println("OUCH said bb");
+                    bigbaddie = boss.loseHP();
+                    nextW = new FightWorld(user, enemies, bigbaddie.teleport(), level);
+                }
             }
             
             //If first wave is all dead, spawn minions

@@ -15,11 +15,28 @@ import java.util.Random;
 public class Minions {
 
     Posn pos;
+    boolean followHuh;
     int width, height;
     Random random = new Random();
 
+    public Minions(Posn pos, boolean followNum) {
+        this.pos = pos;
+        this.followHuh = followHuh;
+    }
+    
     public Minions(Posn pos) {
         this.pos = pos;
+        this.followHuh = mode();
+    }
+    
+    
+    public boolean mode() {
+        if((random.nextInt((4 - 0) + 1) + 0) < 3) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     public Minions move(User user) {
@@ -30,17 +47,33 @@ public class Minions {
         int xu = user.pos.x;
         int yu = user.pos.y;
         //if left of user, move right
-        if (xm < xu) {
-            return new Minions(new Posn(xm + 1, ym));
-        } //if right of user, move left
-        else if (xm > xu) {
-            return new Minions(new Posn(xm - 1, ym));
-        } //if above under user, move down
-        else if (ym < yu) {
-            return new Minions(new Posn(xm, ym + 1));
-        } //else move up
+        if(mode()) {
+            if (xm < xu) {
+                return new Minions(new Posn(xm + 1, ym));
+            } //if right of user, move left
+            else if (xm > xu) {
+                return new Minions(new Posn(xm - 1, ym));
+            } //if above under user, move down
+            else if (ym < yu) {
+                return new Minions(new Posn(xm, ym + 1));
+            } //else move up
+            else {
+                return new Minions(new Posn(xm, ym - 1));
+            }
+        }
         else {
-            return new Minions(new Posn(xm, ym - 1));
+            if (ym < yu) {
+                return new Minions(new Posn(xm, ym + 1));
+            }
+            else if (ym > yu) {
+                return new Minions(new Posn(xm, ym - 1));
+            }
+            else if (xm < xu) {
+                return new Minions(new Posn(xm + 1, ym));
+            }
+            else {
+                return new Minions(new Posn(xm - 1, ym));
+            }
         }
     }
 
