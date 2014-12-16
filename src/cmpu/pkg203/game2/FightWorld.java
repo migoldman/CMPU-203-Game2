@@ -122,6 +122,9 @@ public class FightWorld extends World {
     }
 
     public WorldImage drawBoss() {
+        if(boss.invinc) {
+            return new DiskImage(new Posn(boss.pos.x*SIZE, boss.pos.y*SIZE), SIZE, new Yellow());
+        }
         return new DiskImage(new Posn(boss.pos.x*SIZE, boss.pos.y*SIZE), SIZE, new Red());
     }
 
@@ -144,7 +147,6 @@ public class FightWorld extends World {
         } else if (ke.equals("p")) {
             return new PauseWorld(user, enemies, boss, level);
         }
-        System.out.println(ke + " was pressed");
         return new FightWorld(user, enemies, boss, level);
     }
 
@@ -154,6 +156,8 @@ public class FightWorld extends World {
         
         BigBoss bigbaddie = boss;
         BigBoss bigmove = boss.move(user);
+        
+        User nextU = user;
         
         FightWorld nextW = new FightWorld(user, enemies, bigmove, level);
         
@@ -169,34 +173,35 @@ public class FightWorld extends World {
         while(evil.hasNext()) {
             Minions baddie = evil.next();
             System.out.println("Baddie is at " + baddie.pos.x + " and " + baddie.pos.y);
-            if (baddie.onUserHuh(user)) {
+            if (baddie.onUserHuh(nextU)) {
                 System.out.println("Baddie exploded!");
-                nextW = new FightWorld(user.loseHP(), nextM, bigmove, level);
+                nextU = nextU.loseHP();
+                nextW = new FightWorld(nextU, nextM, bigmove, level);
             }
             
-            else if (baddie.onFireHuh(user)) {
+            else if (baddie.onFireHuh(nextU)) {
                 System.out.println("Baddie on fire!");
-                nextW = new FightWorld(user, nextM, bigmove, level);
+                nextW = new FightWorld(nextU, nextM, bigmove, level);
             } 
             
             else {
-                nextM.add(baddie.move(user));
-                bigbaddie = bigbaddie.move(user);
-                nextW = new FightWorld(user, nextM, bigmove, level);
+                nextM.add(baddie.move(nextU));
+                bigbaddie = bigbaddie.move(nextU);
+                nextW = new FightWorld(nextU, nextM, bigmove, level);
             }
         }
         
         //checks boss on fire and on user
             //if on user, teleport
-        if (boss.onUserHuh(user)) {
-            System.out.print("teleporting!");
+        if (boss.onUserHuh(nextU)) {
+            System.out.print("Take that! TATICAL RETREAT");
             bigbaddie = boss.teleport();
-            nextW =  new FightWorld(user.loseHP(), enemies, bigbaddie, level);
+            nextW =  new FightWorld(nextU.loseHP(), nextM, bigbaddie, level);
             
             //if on fire, check if dead
-        } else if (boss.onFireHuh(user)) {
+        } else if (boss.onFireHuh(nextU)) {
             if(boss.invinc) {
-                System.out.println("YOUR FIRE DOES NOTHING TO ME");
+                System.out.println("YOUR ATTACK DOES NOTHING TO ME!");
             }
             else {
                 if (boss.HP - 1 <= 0) {
@@ -206,7 +211,7 @@ public class FightWorld extends World {
                 } else {
                     System.out.println("OUCH said bb");
                     bigbaddie = boss.loseHP();
-                    nextW = new FightWorld(user, enemies, bigbaddie.teleport(), level);
+                    nextW = new FightWorld(nextU, nextM, bigbaddie.teleport(), level);
                 }
             }
             
@@ -215,13 +220,13 @@ public class FightWorld extends World {
             System.out.println("Spawning baddies");
             bigbaddie.invinc = false;
             bigmove.invinc = false;
-            nextW = new FightWorld(user, spawnMinions(user,bigmove,level), bigmove, level);
+            nextW = new FightWorld(user, spawnMinions(nextU,bigmove,level), bigmove, level);
         }
         
         System.out.println("Defaulting");
         System.out.println("size: " + enemies.size());
         while(evil.hasNext()) {
-            nextM.add(evil.next().move(user));
+            nextM.add(evil.next().move(nextU));
         }
         return nextW.onKeyEvent("");
     }
@@ -230,7 +235,8 @@ public class FightWorld extends World {
     public WorldEnd worldEnds() {
         if (user.isDeadHuh()) {
             System.out.println("You died! You got to level " + level);
-            return new WorldEnd(true, new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2), ("GAME OVER! You got to level " + level), 20, new Black()));
+            return new WorldEnd(true, new TextImage(new Posn(SCREENWIDTH / 2, SCREENHEIGHT / 2), 
+                    ("GAME OVER! You got to level " + level), 20, new Black()));
         } else {
             return new WorldEnd(false, this.makeImage());
         }

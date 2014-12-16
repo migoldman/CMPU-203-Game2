@@ -47,9 +47,10 @@ public class PauseWorld extends World {
         else if(ke.equals("up")) {            
             boss.HP++;
             level++;
+            enemies = new LinkedList();
             System.out.println("Level increased to " + level);
             System.out.println("Boss HP is " + boss.HP + " and " + (level+2) + 
-                    " minions will spawn next wave");
+                    " minions are waiting");
 
         }
         
@@ -59,10 +60,11 @@ public class PauseWorld extends World {
             }
             else {
                 boss.HP--;
+                enemies = new LinkedList();
                 level--;
                 System.out.println("Level decreased to " + level);
                 System.out.println("Boss HP is " + boss.HP + " and " + (level +2) + 
-                        " minions will spawn next wave");
+                        " minions are waiting");
                 
             }
         }
