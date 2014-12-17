@@ -64,16 +64,6 @@ public class Fire {
                 return new Fire(x+1,y,Rotation.RIGHT,this.upgrade,this.color);
         }
     }
-    
-    //width of the flame based on rotation (including upgrade)
-    public int width() {
-        return 1;
-    }
-    
-    //height of the falme based on rotation (including upgrade)
-    public int height() {
-        return 1;
-    }
    
 }
 

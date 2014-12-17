@@ -24,9 +24,9 @@ public class CMPU203Game2 {
     /**
      * @param args the command line arguments
      */
-//    public static void main(String[] args) {
-//       FightWorld game = new FightWorld();
-//       game.bigBang(600, 600, .3);
-//    }
-//    
+    public static void main(String[] args) {
+       FightWorld game = new FightWorld();
+       game.bigBang(600, 600, .3);
+    }
+    
 }

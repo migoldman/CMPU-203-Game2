@@ -23,7 +23,7 @@ public class Testers {
     User user = new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 3);
     Fire fire = new Fire();
     BigBoss bbInvinc = new BigBoss(new Posn(20, 10), true, 3);
-    BigBoss bbNonvinc = new BigBoss(new Posn(20, 10), true, 3);
+    BigBoss bbNonvinc = new BigBoss(new Posn(20, 10), false, 3);
     int level1 = 1;
     FightWorld fwEI = new FightWorld(user, MT, bbInvinc, level1);
     LinkedList<Minions> enemies = fwEI.spawnMinions(user, bbInvinc, level1);
@@ -131,12 +131,15 @@ public class Testers {
     public boolean testMinionOnUser(Tester t) {
         User user = new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 3);
         Minions baddie = new Minions(new Posn(5,5), true);
+        Minions baddie2 = new Minions(new Posn(9,9), true);
         MT.add(baddie);
         LinkedList<Minions> baddieList = MT;
         FightWorld fw = new FightWorld(user,baddieList,bbInvinc,level1);
         
         return t.checkExpect(fw.onTick(),
-                new FightWorld(user.loseHP(),new LinkedList<Minions>(), bbInvinc,level1));
+                new FightWorld(user.loseHP(),new LinkedList<Minions>(), bbInvinc,level1))
+                && t.checkExpect(baddie2.onUserHuh(user),
+                        false);
     }
     
     public boolean testPause(Tester t) {
@@ -163,17 +166,54 @@ public class Testers {
                         pw)
                 && t.checkExpect(pw.onKeyEvent("up"),
                         new PauseWorld(user, new LinkedList<Minions>(), bbInvinc, (level1+1)))
+                
+                //causing errors, not sure why it is returning an empty list, the function states it removes one enemy
                 && t.checkExpect(pw.onKeyEvent(" "),
                         new PauseWorld(user, minus1, bbInvinc, level1));
         
         
     }
     
+    public boolean testBossMove(Tester t) {
+        User user = new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 3);
+        return t.checkExpect(bbNonvinc.move(user),
+                new BigBoss( new Posn(20,9), false, 3));
+        
+    }
+    
+    public boolean testBosstele(Tester t) {
+        return t.checkExpect(bbNonvinc.teleport(user, enemies).pos == bbNonvinc.pos,
+                false);
+    }
+    
+    public boolean testBossFire(Tester t) {
+        User user = new User(new Posn(20, 9), Rotation.DOWN, true, fire.attack(this.user), 3);
+        
+        return t.checkExpect(bbNonvinc.onFireHuh(user),
+                true)
+            &&  t.checkExpect(bbInvinc.onFireHuh(user),
+                false);
+    }
+    
+    public boolean testMinionMove(Tester t) {
+        User user = new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 3);
+        Minions baddie = new Minions(new Posn(6,6), true);
+        
+        return t.checkExpect(baddie.move(user).pos.x == 7,
+                        false)
+                && t.checkExpect(baddie.move(user).pos.y == 7,
+                        false);
+    }
+    
+    
+
+    
     //Unsure why
     /*
     
     ERROR ON THIS AND I AM NOT SURE WHY? SAYS I AM LOSING HP, BUT I THINK IT IS BECAUSE 
     THE FIRE.ATTACK(USER) IS REFERENCING A USER THAT ISN'T ATTACKING, UNCLEAR THOUGH
+    
     public boolean testMinionOnFire(Tester t) {
         User user = new User(new Posn(5, 5), Rotation.UP, true, fire.attack(this.user), 3);
         Minions baddie = new Minions(new Posn(5,4), true);
@@ -189,24 +229,7 @@ public class Testers {
     
     //So random
     
-    
-//    //Minion moves you can't test due to randomness (although it sometimes passes)
-////    public boolean testMinionMove(Tester t) {
-////        User user = new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 3);
-////        Minions baddie = new Minions(new Posn(6,6), true);
-////        
-////        return t.checkExpect(baddie.move(user),
-////                        new Minions(new Posn(6,5), false))
-////                || t.checkExpect(baddie.move(user),
-////                        new Minions(new Posn(6,5), true))
-////                || t.checkExpect(baddie.move(user),
-////                        new Minions(new Posn(5,6), true))
-////                || t.checkExpect(baddie.move(user),
-////                        new Minions(new Posn(5,6), false));
-////
-////    }
-//    
-//    
+
 //    //Can't test respawn since it is random locations
 ////    public boolean testMinionRespawn(Tester t) {
 ////        LinkedList<Minions> temp = fwNN.spawnMinions(user, bbInvinc, level1);
@@ -214,7 +237,7 @@ public class Testers {
 ////                new FightWorld(user,temp,bbNonvinc,level1));
 ////    }
 
-    public static void main(String[] args) {
-        Tester.runReport(new Testers(), false, false);
-    }
+//    public static void main(String[] args) {
+//        Tester.runReport(new Testers(), false, false);
+//    }
 }

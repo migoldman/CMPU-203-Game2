@@ -72,29 +72,31 @@ public class BigBoss {
         int xu = user.pos.x;
         int yu = user.pos.y;
         if (user.firing) {
-            Rotation fireR = user.fire.rotation;
-            switch (fireR) {
-                case UP:
-                    //fire height takes into account upgrade, so it is fine
-                    if ((yb == yu - 1)
-                            && xb == xu) {
-                        return true;
-                    }
-                case DOWN:
-                    if ((yb == yu + 1 )
-                            && xb == xu) {
-                        return true;
-                    }
-                case RIGHT:
-                    if ((xb == xu + 1
-                            && yb == yu)) {
-                        return true;
-                    }
-                case LEFT:
-                    if ((xb == xu - 1
-                            && yb == yu)) {
-                        return true;
-                    }
+            if(!this.invinc) {
+                Rotation fireR = user.fire.rotation;
+                switch (fireR) {
+                    case UP:
+                        //fire height takes into account upgrade, so it is fine
+                        if ((yb == yu - 1)
+                                && xb == xu) {
+                            return true;
+                        }
+                    case DOWN:
+                        if ((yb == yu + 1 )
+                                && xb == xu) {
+                            return true;
+                        }
+                    case RIGHT:
+                        if ((xb == xu + 1
+                                && yb == yu)) {
+                            return true;
+                        }
+                    case LEFT:
+                        if ((xb == xu - 1
+                                && yb == yu)) {
+                            return true;
+                        }
+                }
 
             }
         }
