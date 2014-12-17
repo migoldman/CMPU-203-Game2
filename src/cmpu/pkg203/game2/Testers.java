@@ -28,6 +28,7 @@ public class Testers {
     FightWorld fwEI = new FightWorld(user, MT, bbInvinc, level1);
     LinkedList<Minions> enemies = fwEI.spawnMinions(user, bbInvinc, level1);
     FightWorld fwNN = new FightWorld(user, enemies, bbInvinc, level1);
+    PauseWorld pw = new PauseWorld(user, enemies, bbInvinc, level1);
 
     public boolean testUserMoveNonFire(Tester t) {
         //5,5, up, not firing
@@ -138,6 +139,35 @@ public class Testers {
                 new FightWorld(user.loseHP(),new LinkedList<Minions>(), bbInvinc,level1));
     }
     
+    public boolean testPause(Tester t) {
+        return t.checkExpect(fwNN.onKeyEvent("p"),
+                new PauseWorld(user, enemies, bbInvinc, level1));
+    }
+    
+    public boolean testFight(Tester t) {
+        Minions addme = new Minions(new Posn(6,6), true);
+        Minions addme2 = new Minions(new Posn(8,8), false);
+        LinkedList<Minions> temp = new LinkedList();
+        temp.add(addme);
+        temp.add(addme2);
+        LinkedList<Minions> minus1 = temp;
+        minus1.remove(0);
+        
+        return t.checkExpect(pw.onKeyEvent("h"),
+                    new PauseWorld(new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 4), enemies, bbInvinc,level1))
+                &&  t.checkExpect(pw.onKeyEvent("`"),
+                        new FightWorld(new User(new Posn(5, 5), Rotation.UP, false, new Fire(), 0), enemies, bbInvinc, level1))
+                &&  t.checkExpect(pw.onKeyEvent("p"),
+                        new FightWorld(user, enemies, bbInvinc, level1))
+                &&  t.checkExpect(pw.onKeyEvent("down"),
+                        pw)
+                && t.checkExpect(pw.onKeyEvent("up"),
+                        new PauseWorld(user, new LinkedList<Minions>(), bbInvinc, (level1+1)))
+                && t.checkExpect(pw.onKeyEvent(" "),
+                        new PauseWorld(user, minus1, bbInvinc, level1));
+        
+        
+    }
     
     //Unsure why
     /*
