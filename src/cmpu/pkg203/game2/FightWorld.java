@@ -35,7 +35,7 @@ public class FightWorld extends World {
         for (int i = 0; i < level + 2; i++) {
             enemies.add(new Minions(new Posn(randomInt(10, 19), randomInt(0,20))));
         }
-        boss = new BigBoss(new Posn(20, 10), true, level);
+        boss = new BigBoss(new Posn(20, 10), true, 3);
         level = 1;
     }
 
