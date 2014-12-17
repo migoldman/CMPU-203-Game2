@@ -5,6 +5,8 @@
  */
 package cmpu.pkg203.game2;
 
+import java.util.LinkedList;
+import java.util.Random;
 import javalib.worldimages.Posn;
 
 /**
@@ -16,6 +18,7 @@ public class BigBoss {
     Posn pos;
     boolean invinc;
     int HP;
+    Random random = new Random();
 
     BigBoss(Posn pos, boolean invinc, int HP) {
         this.pos = pos;
@@ -27,8 +30,16 @@ public class BigBoss {
         return new BigBoss(pos, false, HP - 1);
     }
 
-    public BigBoss teleport() {
-        return new BigBoss(new Posn(20, 10), this.invinc, this.HP);
+    public BigBoss teleport(User user, LinkedList<Minions> enemies) {
+        int x = random.nextInt((20 - 0) + 1) + 0;
+        int y = random.nextInt((20 - 0) + 1) + 0;
+        for(int i = 0; i < enemies.size(); i++) {
+            if((x == user.pos.x && y == user.pos.y) 
+                    || (x == enemies.get(i).pos.x && y == enemies.get(i).pos.y)) {
+                return teleport(user, enemies);
+            }
+        }
+        return new BigBoss(new Posn(x,y), invinc, HP);
     }
 
     public BigBoss move(User user) {

@@ -195,8 +195,7 @@ public class FightWorld extends World {
             //if on user, teleport
         if (boss.onUserHuh(nextU)) {
             System.out.print("Take that! TATICAL RETREAT");
-            bigbaddie = boss.teleport();
-            nextW =  new FightWorld(nextU.loseHP(), nextM, bigbaddie, level);
+            nextW =  new FightWorld(nextU.loseHP(), nextM, bigbaddie.teleport(nextU, nextM), level);
             
             //if on fire, check if dead
         } else if (boss.onFireHuh(nextU)) {
@@ -213,7 +212,7 @@ public class FightWorld extends World {
                     //else lose hp
                 } else {
                     bigbaddie = boss.loseHP();
-                    nextW = new FightWorld(nextU, nextM, bigbaddie.teleport(), level);
+                    nextW = new FightWorld(nextU, nextM, bigbaddie.teleport(nextU, nextM), level);
                 }
             }
             
